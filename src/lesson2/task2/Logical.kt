@@ -79,32 +79,7 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     var min2 = 0
     var min3 = 0
     min1 = minOf(a, b, c)
-    if (a == min1) {
-        if (b < c) {
-            min2 = b
-            min3 = c
-        } else {
-            min2 = c
-            min3 = b
-        }
-    }
-    if (b == min1) {
-        if (a < c) {
-            min2 = a
-            min3 = c
-        } else {
-            min2 = c
-            min3 = a
-        }
-    }
-    if (c == min1) {
-        if (b < a) {
-            min2 = b
-            min3 = a
-        } else {
-            min2 = a
-            min3 = b
-        }
-    }
+    min3 = maxOf(a, b, c)
+    min2 = a + b + c - min1 - min3
     return (min1 * min2 <= r * s) && ((min1 <= r) && (min2 <= s) || (min1 <= s) && (min2 <= r))
 }
