@@ -22,7 +22,7 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean =
-    if (number / 1000 + number / 100 % 10 == number % 100 / 10 + number % 10) true else false
+    number / 1000 + number / 100 % 10 == number % 100 / 10 + number % 10
 
 /**
  * Простая (2 балла)
@@ -32,7 +32,7 @@ fun isNumberHappy(number: Int): Boolean =
  * Считать, что ферзи не могут загораживать друг друга.
  */
 fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
-    if ((x1 == x2) || (y1 == y2) || (abs(x1 - x2) == abs(y1 - y2))) true else false
+    (x1 == x2) || (y1 == y2) || (abs(x1 - x2) == abs(y1 - y2))
 
 
 /**
@@ -44,9 +44,10 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
 fun daysInMonth(month: Int, year: Int): Int {
     var ans = 0
     if ((month == 1) || (month == 3) || (month == 5) || (month == 7) || (month == 8) || (month == 10) || (month == 12)) ans =
-        31 else
-        if ((month == 4) || (month == 6) || (month == 9) || (month == 11)) ans = 30 else
-            if (((month == 2) && (year % 4 == 0)) && (year % 100 != 0) || (year % 400 == 0)) ans = 29 else ans = 28
+        31
+    else if ((month == 4) || (month == 6) || (month == 9) || (month == 11)) ans = 30
+    else if (((month == 2) && (year % 4 == 0)) && (year % 100 != 0) || (year % 400 == 0)) ans = 29
+    else ans = 28
     return ans
 }
 
@@ -61,7 +62,7 @@ fun circleInside(
     x1: Double, y1: Double, r1: Double,
     x2: Double, y2: Double, r2: Double
 ): Boolean =
-    if (r2 >= r1 + sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))) true else false
+    r2 >= r1 + sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 
 
 /**
@@ -77,7 +78,7 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     var min1 = 0
     var min2 = 0
     var min3 = 0
-    min1 = min(min(a, b), min(b, c))
+    min1 = minOf(a, b, c)
     if (a == min1) {
         if (b < c) {
             min2 = b
@@ -105,7 +106,5 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
             min3 = b
         }
     }
-    var ans = true
-    if ((min1 * min2 <= r * s) && ((min1 <= r) && (min2 <= s) || (min1 <= s) && (min2 <= r))) ans = true else ans = false
-    return ans
+    return (min1 * min2 <= r * s) && ((min1 <= r) && (min2 <= s) || (min1 <= s) && (min2 <= r))
 }

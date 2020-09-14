@@ -72,10 +72,10 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String {
     var word = ""
-    if (age % 100 in 5..20) word = "лет" else
-        if (age % 10 == 1) word = "год" else
-            if (age % 10 in 2..4) word = "года" else
-                if ((age % 10 in 5..9) || (age % 10 == 0)) word = "лет"
+    if (age % 100 in 5..20) word = "лет"
+    else if (age % 10 == 1) word = "год"
+    else if (age % 10 in 2..4) word = "года"
+    else if ((age % 10 in 5..9) || (age % 10 == 0)) word = "лет"
     return "$age $word"
 }
 
@@ -155,28 +155,9 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     var max2 = 0.0
     var max3 = 0.0
     var ans = 0
-    max1 = max(max(a, b), max(b, c))
-    if (a == max1) if (b > c) {
-        max2 = b
-        max3 = c
-    } else {
-        max2 = c
-        max3 = b
-    }
-    if (b == max1) if (a > c) {
-        max2 = a
-        max3 = c
-    } else {
-        max2 = c
-        max3 = a
-    }
-    if (c == max1) if (b > a) {
-        max2 = b
-        max3 = a
-    } else {
-        max2 = a
-        max3 = b
-    }
+    max1 = maxOf(a, b, c)
+    max3 = minOf(a, b, c)
+    max2 = a + b + c - max1 - max3
     if (max1 > max2 + max3) ans = -1 else {
         if (sqr(max1) == sqr(max2) + sqr(max3)) ans = 1
         if (sqr(max1) < sqr(max2) + sqr(max3)) ans = 0
@@ -211,8 +192,10 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     }
     var ans = 0
 
-    if (end1 > end2) ans = end2 - start2 else if (start2 < end1) ans = end1 - start2 else if (start2 == end1) ans =
-        0 else ans = -1
+    if (end1 > end2) ans = end2 - start2
+    else if (start2 < end1) ans = end1 - start2
+    else if (start2 == end1) ans = 0
+    else ans = -1
 
     return ans
 }
