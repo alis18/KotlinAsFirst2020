@@ -151,13 +151,10 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    var max1 = 0.0
-    var max2 = 0.0
-    var max3 = 0.0
+    val max1 = maxOf(a, b, c)
+    val max3 = minOf(a, b, c)
+    val max2 = a + b + c - max1 - max3
     var ans = 0
-    max1 = maxOf(a, b, c)
-    max3 = minOf(a, b, c)
-    max2 = a + b + c - max1 - max3
     if (max1 > max2 + max3) ans = -1 else {
         if (sqr(max1) == sqr(max2) + sqr(max3)) ans = 1
         if (sqr(max1) < sqr(max2) + sqr(max3)) ans = 0
@@ -190,12 +187,9 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
         start2 = a
         end2 = b
     }
-    var ans = 0
 
-    if (end1 > end2) ans = end2 - start2
-    else if (start2 < end1) ans = end1 - start2
-    else if (start2 == end1) ans = 0
-    else ans = -1
-
-    return ans
+    return if (end1 > end2) end2 - start2
+        else if (start2 < end1) end1 - start2
+        else if (start2 == end1) 0
+        else -1
 }
