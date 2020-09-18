@@ -78,7 +78,7 @@ fun digitNumber(n: Int): Int {
     var sum = 0
     var number = n
     if (number == 0) sum = 1 else {
-        while (number > 0) {
+        while (number != 0) {
             sum++
             number = number / 10
         }
@@ -93,9 +93,22 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    return if (n == 1) 1
-    else if (n == 2) 1
-    else fib(n - 1) + fib(n - 2)
+    var sum = 2
+    var ans = 0
+    if (n == 1) {ans = 1}
+    else if (n == 2) {ans = 1}
+    else {
+        var a = 1
+        var b = 1
+        while (sum < n) {
+            var t = b
+            b = a + b
+            a = t
+            sum++
+        }
+        ans = b
+    }
+    return ans
 }
 
 /**
@@ -202,7 +215,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
     val max = max(m, n)
     var ans = false
     var maxfor = sqrt(max.toDouble()).toInt()
-    for (i in 1..maxfor) {
+    for (i in 0..maxfor) {
         if (i * i in min..max) ans = true
     }
     return ans
