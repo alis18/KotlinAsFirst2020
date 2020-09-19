@@ -2,9 +2,12 @@
 
 package lesson3.task1
 
+import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.math.min
 import kotlin.math.max
+import kotlin.math.abs
+
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -75,13 +78,11 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var sum = 0
+    var sum = 1
     var number = n
-    if (number == 0) sum = 1 else {
-        while (number != 0) {
-            sum++
-            number = number / 10
-        }
+    while (abs(number) >= 10) {
+        sum++
+        number = number / 10
     }
     return sum
 }
@@ -93,22 +94,22 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    var sum = 2
-    var ans = 0
-    if (n == 1) {ans = 1}
-    else if (n == 2) {ans = 1}
-    else {
-        var a = 1
-        var b = 1
-        while (sum < n) {
-            var t = b
-            b = a + b
-            a = t
-            sum++
+    return when {
+        n == 1 -> 1
+        n == 2 -> 1
+        else -> {
+            var a = 1
+            var b = 1
+            var sum = 2
+            while (sum < n) {
+                var t = b
+                b = a + b
+                a = t
+                sum++
+            }
+            return b
         }
-        ans = b
     }
-    return ans
 }
 
 /**
@@ -117,14 +118,10 @@ fun fib(n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var ans = 0
-    for (i in 2..n) {
-        if (n % i == 0) {
-            ans = i
-            break
-        }
+    for (i in 2..sqrt(n.toDouble()).toInt()) {
+        if (n % i == 0) return i
     }
-    return ans
+    return n
 }
 
 /**
@@ -133,14 +130,10 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var ans = 0
-    for (i in (n - 1) downTo 1) {
-        if (n % i == 0) {
-            ans = i
-            break
-        }
+    for (i in (n - 1) downTo sqrt(n.toDouble()).toInt()) {
+        if (n % i == 0) return i
     }
-    return ans
+    return 1
 }
 
 /**
@@ -165,8 +158,10 @@ fun collatzSteps(x: Int): Int {
     while (number != 1) {
         sum++
         if (number % 2 == 0) {
-            number = number / 2
-        } else number = 3 * number + 1
+            number /= 2
+        } else {
+            number = 3 * number + 1
+        }
     }
     return sum
 }
@@ -180,10 +175,10 @@ fun collatzSteps(x: Int): Int {
 fun lcm(m: Int, n: Int): Int {
     var a = m
     var b = n
-    while ((a != 0) && (b != 0)) {
+    while (a != 0 && b != 0) {
         if (a > b) a = a % b else b = b % a
     }
-    var nod = a + b
+    val nod = a + b
     return m * n / nod
 }
 
@@ -196,11 +191,10 @@ fun lcm(m: Int, n: Int): Int {
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
     var x = min(m, n)
-    var ans = true
     for (i in 2..x) {
-        if ((m % i == 0) && (n % i == 0)) ans = false
+        if (m % i == 0 && n % i == 0) return false
     }
-    return ans
+    return true
 }
 
 /**
@@ -213,12 +207,11 @@ fun isCoPrime(m: Int, n: Int): Boolean {
 fun squareBetweenExists(m: Int, n: Int): Boolean {
     val min = min(m, n)
     val max = max(m, n)
-    var ans = false
     var maxfor = sqrt(max.toDouble()).toInt()
     for (i in 0..maxfor) {
-        if (i * i in min..max) ans = true
+        if (i * i in min..max) return true
     }
-    return ans
+    return false
 }
 
 /**
@@ -232,16 +225,13 @@ fun revert(n: Int): Int {
     var ans = 0
     var number = n
     var step = 1
-    while (number > 0) {
-        step = step * 10
-        number = number / 10
+    for (i in 1..digitNumber(number) - 1) {
+        step *= 10
     }
-    step = step / 10
-    number = n
     while (number > 0) {
-        ans = ans + number % 10 * step
-        step = step / 10
-        number = number / 10
+        ans += number % 10 * step
+        step /= 10
+        number /= 10
     }
     return ans
 }
@@ -304,17 +294,14 @@ fun squareSequenceDigit(n: Int): Int {
     var square = 0
     while (number > 0) {
         square = i * i
-        var length = 0
-        var x = square
-        while (x > 0) {
-            length++
-            x = x / 10
-        }
+        var length = digitNumber(square)
         number = number - length
         i++
     }
     var ans = 0
-    if (number == 0) {ans = square % 10} else {
+    if (number == 0) {
+        ans = square % 10
+    } else {
         while (number < 0) {
             number++
             square = square / 10
@@ -335,31 +322,28 @@ fun squareSequenceDigit(n: Int): Int {
  */
 fun fibSequenceDigit(n: Int): Int {
     var number = n
-    var a = 1
-    var b = 1
-    var ans = 0
-    if (number == 1) {ans = a}
-    else if (number == 2) {ans = b}
-    else {
-        while (number > 2) {
-            var t = b
-            b = b + a
-            a = t
-            var x = b
-            var length = 0
-            while (x > 0) {
-                length++
-                x = x / 10
+    when {
+        number == 1 -> return 1
+        number == 2 -> return 1
+        else -> {
+            var a = 1
+            var b = 1
+            while (number > 2) {
+                var t = b
+                b = b + a
+                a = t
+                var length = digitNumber(b)
+                number = number - length
             }
-            number = number - length
-        }
-        if (number == 2) {ans = b % 10} else {
-            while (number < 2) {
-                number++
-                b = b / 10
+            if (number == 2) {
+                return b % 10
+            } else {
+                while (number < 2) {
+                    number++
+                    b = b / 10
+                }
+                return b % 10
             }
-            ans = b % 10
         }
     }
-    return ans
 }
