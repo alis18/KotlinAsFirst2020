@@ -82,7 +82,7 @@ fun digitNumber(n: Int): Int {
     var number = n
     while (abs(number) >= 10) {
         sum++
-        number = number / 10
+        number /= 10
     }
     return sum
 }
@@ -93,24 +93,24 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int {
-    return when {
+fun fib(n: Int): Int =
+    when {
         n == 1 -> 1
         n == 2 -> 1
         else -> {
             var a = 1
             var b = 1
-            var sum = 2
-            while (sum < n) {
-                var t = b
-                b = a + b
+            var number = 2
+            while (number < n) {
+                val t = b
+                b += a
                 a = t
-                sum++
+                number++
             }
-            return b
+            b
         }
     }
-}
+
 
 /**
  * Простая (2 балла)
@@ -154,16 +154,16 @@ fun maxDivisor(n: Int): Int {
  */
 fun collatzSteps(x: Int): Int {
     var number = x
-    var sum = 0
+    var ans = 0
     while (number != 1) {
-        sum++
+        ans++
         if (number % 2 == 0) {
             number /= 2
         } else {
             number = 3 * number + 1
         }
     }
-    return sum
+    return ans
 }
 
 /**
@@ -176,7 +176,7 @@ fun lcm(m: Int, n: Int): Int {
     var a = m
     var b = n
     while (a != 0 && b != 0) {
-        if (a > b) a = a % b else b = b % a
+        if (a > b) a %= b else b %= a
     }
     val nod = a + b
     return m * n / nod
@@ -190,7 +190,7 @@ fun lcm(m: Int, n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    var x = min(m, n)
+    val x = min(m, n)
     for (i in 2..x) {
         if (m % i == 0 && n % i == 0) return false
     }
@@ -207,7 +207,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
 fun squareBetweenExists(m: Int, n: Int): Boolean {
     val min = min(m, n)
     val max = max(m, n)
-    var maxfor = sqrt(max.toDouble()).toInt()
+    val maxfor = sqrt(max.toDouble()).toInt()
     for (i in 0..maxfor) {
         if (i * i in min..max) return true
     }
@@ -224,13 +224,12 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
 fun revert(n: Int): Int {
     var ans = 0
     var number = n
-    var step = 1
-    for (i in 1..digitNumber(number) - 1) {
-        step *= 10
-    }
+    var step = 10.0
+    step = step.pow(digitNumber(number) - 1)
+    var stepp = step.toInt()
     while (number > 0) {
-        ans += number % 10 * step
-        step /= 10
+        ans += number % 10 * stepp
+        stepp /= 10
         number /= 10
     }
     return ans
@@ -294,20 +293,17 @@ fun squareSequenceDigit(n: Int): Int {
     var square = 0
     while (number > 0) {
         square = i * i
-        var length = digitNumber(square)
-        number = number - length
+        val length = digitNumber(square)
+        number -= length
         i++
     }
     var ans = 0
-    if (number == 0) {
-        ans = square % 10
-    } else {
-        while (number < 0) {
-            number++
-            square = square / 10
-        }
-        ans = square % 10
+    while (number < 0) {
+        number++
+        square /= 10
     }
+    ans = square % 10
+
     return ans
 }
 
@@ -321,18 +317,18 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var number = n
     when {
-        number == 1 -> return 1
-        number == 2 -> return 1
+        n == 1 -> return 1
+        n == 2 -> return 1
         else -> {
+            var number = n
             var a = 1
             var b = 1
             while (number > 2) {
-                var t = b
-                b = b + a
+                val t = b
+                b += a
                 a = t
-                var length = digitNumber(b)
+                val length = digitNumber(b)
                 number = number - length
             }
             if (number == 2) {
@@ -340,7 +336,7 @@ fun fibSequenceDigit(n: Int): Int {
             } else {
                 while (number < 2) {
                     number++
-                    b = b / 10
+                    b /= 10
                 }
                 return b % 10
             }
