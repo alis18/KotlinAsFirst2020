@@ -190,12 +190,15 @@ fun lcm(m: Int, n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    val x = min(m, n)
-    for (i in 2..x) {
-        if (m % i == 0 && n % i == 0) return false
+    var a = m
+    var b = n
+    while (a != 0 && b != 0) {
+        if (a > b) a %= b else b %= a
     }
-    return true
+    val nod = a + b
+    return if (nod == 1) true else false
 }
+
 
 /**
  * Средняя (3 балла)
@@ -224,8 +227,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
 fun revert(n: Int): Int {
     var ans = 0
     var number = n
-    var step = 10.0
-    step = step.pow(digitNumber(number) - 1)
+    var step = 10.0.pow(digitNumber(number) - 1)
     var stepp = step.toInt()
     while (number > 0) {
         ans += number % 10 * stepp
@@ -297,14 +299,12 @@ fun squareSequenceDigit(n: Int): Int {
         number -= length
         i++
     }
-    var ans = 0
     while (number < 0) {
         number++
         square /= 10
     }
-    ans = square % 10
+    return square % 10
 
-    return ans
 }
 
 /**
@@ -317,9 +317,9 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    when {
-        n == 1 -> return 1
-        n == 2 -> return 1
+    return when {
+        n == 1 -> 1
+        n == 2 -> 1
         else -> {
             var number = n
             var a = 1
@@ -329,17 +329,13 @@ fun fibSequenceDigit(n: Int): Int {
                 b += a
                 a = t
                 val length = digitNumber(b)
-                number = number - length
+                number -= length
             }
-            if (number == 2) {
-                return b % 10
-            } else {
-                while (number < 2) {
-                    number++
-                    b /= 10
-                }
-                return b % 10
+            while (number < 2) {
+                number++
+                b /= 10
             }
+            b % 10
         }
     }
 }
