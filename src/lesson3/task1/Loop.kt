@@ -196,7 +196,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
         if (a > b) a %= b else b %= a
     }
     val nod = a + b
-    return if (nod == 1) true else false
+    return nod == 1
 }
 
 
@@ -227,11 +227,10 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
 fun revert(n: Int): Int {
     var ans = 0
     var number = n
-    var step = 10.0.pow(digitNumber(number) - 1)
-    var stepp = step.toInt()
+    var step = 10.0.pow(digitNumber(number) - 1).toInt()
     while (number > 0) {
-        ans += number % 10 * stepp
-        stepp /= 10
+        ans += number % 10 * step
+        step /= 10
         number /= 10
     }
     return ans
@@ -304,7 +303,6 @@ fun squareSequenceDigit(n: Int): Int {
         square /= 10
     }
     return square % 10
-
 }
 
 /**
@@ -316,8 +314,8 @@ fun squareSequenceDigit(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int {
-    return when {
+fun fibSequenceDigit(n: Int): Int =
+     when {
         n == 1 -> 1
         n == 2 -> 1
         else -> {
@@ -338,4 +336,3 @@ fun fibSequenceDigit(n: Int): Int {
             b % 10
         }
     }
-}
