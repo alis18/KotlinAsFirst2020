@@ -3,7 +3,9 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.digitNumber
 import kotlin.math.sqrt
+import kotlin.math.pow
 
 // Урок 4: списки
 // Максимальное количество баллов = 12
@@ -120,7 +122,13 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = TODO()
+fun abs(v: List<Double>): Double {
+    var ans = 0.0
+    for (i in 0..v.size - 1) {
+        ans += v[i] * v[i]
+    }
+    return sqrt(ans)
+}
 
 /**
  * Простая (2 балла)
@@ -241,7 +249,38 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val const = listOf<Char>('I', 'V', 'X', 'L', 'C', 'D', 'M')
+    var string = ""
+    var number = n
+    var lengthOfNumber = digitNumber(number)
+    while (lengthOfNumber > 0) {
+        val x = number / 10.0.pow(lengthOfNumber-1.toDouble()).toInt()
+        number %= 10.0.pow(lengthOfNumber - 1.toDouble()).toInt()
+        var y = digitNumber(number)
+        var i = 0
+        when (lengthOfNumber) {
+            4 -> i = 7
+            3 -> i = 5
+            2 -> i = 3
+            1 -> i = 1
+        }
+        when (x) {
+            1 -> string = string + const[i - 1]
+            2 -> string = string + const[i - 1] + const[i - 1]
+            3 -> string = string + const[i - 1] + const[i - 1] + const[i - 1]
+            4 -> string = string + const[i - 1] + const[i]
+            5 -> string = string + const[i]
+            6 -> string = string + const[i] + const[i - 1]
+            7 -> string = string + const[i] + const[i - 1] + const[i - 1]
+            8 -> string = string + const[i] + const[i - 1] + const[i - 1] + const[i - 1]
+            9 -> string = string + const[i - 1] + const[i + 1]
+            else -> break
+        }
+        lengthOfNumber--
+    }
+    return string
+}
 
 /**
  * Очень сложная (7 баллов)
@@ -250,4 +289,88 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    var ans = ""
+    var number = n
+    var step = 10.0.pow((digitNumber(number)-1).toDouble()).toInt()
+    var lengthOfNumber = digitNumber(number)
+    while (lengthOfNumber > 0) {
+        var x = number / step
+        var y = 0
+        if (lengthOfNumber != 1) y = number / (step / 10) % 10
+        number = number % step
+        step /= 10
+        var i = 0
+        when (lengthOfNumber % 3) {
+            0 -> i = 0
+            1 -> i = 1
+            2 -> i = 2
+        }
+        if (i == 1) when (x) {
+            1 -> {
+                if (lengthOfNumber == 1) ans = ans + "один" else ans = ans + "одна"
+            }
+            2 -> {
+                if (lengthOfNumber == 1) ans = ans + "два" else ans = ans + "две"
+            }
+            3 -> ans = ans + "три"
+            4 -> ans = ans + "четыре"
+            5 -> ans = ans + "пять"
+            6 -> ans = ans + "шесть"
+            7 -> ans = ans + "семь"
+            8 -> ans = ans + "восемь"
+            9 -> ans = ans + "девять"
+            else -> ""
+        }
+        if (i == 2) when (x) {
+            1 -> {
+                when (y) {
+                    0 -> ans = ans + "десять "
+                    1 -> ans = ans + "одиннадцать"
+                    2 -> ans = ans + "двенадцать"
+                    3 -> ans = ans + "тринадцать"
+                    4 -> ans = ans + "четырнадцать"
+                    5 -> ans = ans + "пятнадцать"
+                    6 -> ans = ans + "шестнадцать"
+                    7 -> ans = ans + "семнадцать"
+                    8 -> ans = ans + "восемнадцать"
+                    9 -> ans = ans + "девятнадцать"
+                }
+                lengthOfNumber--
+                x = number / step
+                number %= step
+                step /= 10
+            }
+            2 -> ans = ans + "двадцать"
+            3 -> ans = ans + "тридцать"
+            4 -> ans = ans + "сорок"
+            5 -> ans = ans + "пятьдесят"
+            6 -> ans = ans + "шестьдесят"
+            7 -> ans = ans + "семьдесят"
+            8 -> ans = ans + "восемьдесят"
+            9 -> ans = ans + "девяносто"
+            else -> ""
+        }
+        if (i == 0) when (x) {
+            1 -> ans = ans + "сто"
+            2 -> ans = ans + "двести"
+            3 -> ans = ans + "триста"
+            4 -> ans = ans + "четыреста"
+            5 -> ans = ans + "пятьсот"
+            6 -> ans = ans + "шестьсот"
+            7 -> ans = ans + "семьсот"
+            8 -> ans = ans + "восемьсот"
+            9 -> ans = ans + "девятьсот"
+            else -> ""
+        }
+        lengthOfNumber--
+        if (lengthOfNumber > 0 && x != 0) ans = ans + " "
+        if (lengthOfNumber == 3) {
+            if (x == 1 && i != 2) ans = ans + "тысяча "
+            else if (x < 5 && x != 0 && i != 2) ans = ans + "тысячи "
+            else ans = ans + "тысяч "
+        }
+    }
+    ans = ans.trim()
+    return ans
+}
