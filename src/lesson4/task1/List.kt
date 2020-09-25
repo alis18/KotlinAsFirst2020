@@ -277,7 +277,7 @@ fun roman(n: Int): String {
             9 -> string = string + const[i - 1] + const[i + 1]
             else -> break
         }
-        lengthOfNumber--
+        lengthOfNumber = digitNumber(number)
     }
     return string
 }
