@@ -299,7 +299,7 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    var ans = StringBuilder()
+    var ans = mutableListOf<String>()
     var number = n
     var step = 10.0.pow((digitNumber(number)-1).toDouble()).toInt()
     var lengthOfNumber = digitNumber(number)
@@ -317,72 +317,72 @@ fun russian(n: Int): String {
         }
         if (i == 1) when (x) {
             1 -> {
-                if (lengthOfNumber == 1) ans.append("один") else ans.append("одна")
+                if (lengthOfNumber == 1) ans.add("один") else ans.add("одна")
             }
             2 -> {
-                if (lengthOfNumber == 1) ans.append("два") else ans.append("две")
+                if (lengthOfNumber == 1) ans.add("два") else ans.add("две")
             }
-            3 -> ans.append("три")
-            4 -> ans.append("четыре")
-            5 -> ans.append("пять")
-            6 -> ans.append("шесть")
-            7 -> ans.append("семь")
-            8 -> ans.append("восемь")
-            9 -> ans.append("девять")
+            3 -> ans.add("три")
+            4 -> ans.add("четыре")
+            5 -> ans.add("пять")
+            6 -> ans.add("шесть")
+            7 -> ans.add("семь")
+            8 -> ans.add("восемь")
+            9 -> ans.add("девять")
             else -> ""
         }
         if (i == 2) when (x) {
             1 -> {
                 when (y) {
-                    0 -> ans.append("десять ")
-                    1 -> ans.append("одиннадцать")
-                    2 -> ans.append("двенадцать")
-                    3 -> ans.append("тринадцать")
-                    4 -> ans.append("четырнадцать")
-                    5 -> ans.append("пятнадцать")
-                    6 -> ans.append("шестнадцать")
-                    7 -> ans.append("семнадцать")
-                    8 -> ans.append("восемнадцать")
-                    9 -> ans.append("девятнадцать")
+                    0 -> ans.add("десять")
+                    1 -> ans.add("одиннадцать")
+                    2 -> ans.add("двенадцать")
+                    3 -> ans.add("тринадцать")
+                    4 -> ans.add("четырнадцать")
+                    5 -> ans.add("пятнадцать")
+                    6 -> ans.add("шестнадцать")
+                    7 -> ans.add("семнадцать")
+                    8 -> ans.add("восемнадцать")
+                    9 -> ans.add("девятнадцать")
                 }
                 lengthOfNumber--
                 x = number / step
                 number %= step
                 step /= 10
             }
-            2 -> ans.append("двадцать")
-            3 -> ans.append("тридцать")
-            4 -> ans.append("сорок")
-            5 -> ans.append("пятьдесят")
-            6 -> ans.append("шестьдесят")
-            7 -> ans.append("семьдесят")
-            8 -> ans.append("восемьдесят")
-            9 -> ans.append("девяносто")
+            2 -> ans.add("двадцать")
+            3 -> ans.add("тридцать")
+            4 -> ans.add("сорок")
+            5 -> ans.add("пятьдесят")
+            6 -> ans.add("шестьдесят")
+            7 -> ans.add("семьдесят")
+            8 -> ans.add("восемьдесят")
+            9 -> ans.add("девяносто")
             else -> ""
         }
         if (i == 0) when (x) {
-            1 -> ans.append("сто")
-            2 -> ans.append("двести")
-            3 -> ans.append("триста")
-            4 -> ans.append("четыреста")
-            5 -> ans.append("пятьсот")
-            6 -> ans.append("шестьсот")
-            7 -> ans.append("семьсот")
-            8 -> ans.append("восемьсот")
-            9 -> ans.append("девятьсот")
+            1 -> ans.add("сто")
+            2 -> ans.add("двести")
+            3 -> ans.add("триста")
+            4 -> ans.add("четыреста")
+            5 -> ans.add("пятьсот")
+            6 -> ans.add("шестьсот")
+            7 -> ans.add("семьсот")
+            8 -> ans.add("восемьсот")
+            9 -> ans.add("девятьсот")
             else -> ""
         }
         lengthOfNumber--
-        if (lengthOfNumber > 0 && x != 0) ans.append(" ")
         if (lengthOfNumber == 3) {
-            if (x == 1 && i != 2) ans.append("тысяча ")
-            else if (x < 5 && x != 0 && i != 2) ans.append("тысячи ")
-            else ans.append("тысяч ")
+            if (x == 1 && i != 2) ans.add("тысяча")
+            else if (x < 5 && x != 0 && i != 2) ans.add("тысячи")
+            else ans.add("тысяч")
         }
     }
-    ans.toString()
-    if (ans.last() == ' ') {
-        return ans.substring(0, ans.length-1)
+    var finalAns = StringBuilder()
+    for (i in 0..ans.size-1) {
+        finalAns.append(ans[i])
+        if (i != ans.size-1) finalAns.append(" ")
     }
-    return ans.toString()
+    return finalAns.toString()
 }
