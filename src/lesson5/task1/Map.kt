@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import kotlin.math.max
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -277,7 +279,14 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    for (i in 0..list.size - 2) {
+        for (j in i + 1..list.size - 1) {
+            if (list[i] + list[j] == number) return Pair(i, j)
+        }
+    }
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная (8 баллов)
@@ -300,4 +309,51 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+
+    var ans = mutableSetOf<String>()
+    var data = Array(treasures.size + 20, { IntArray(capacity + 20) })
+    var weight = listOf<Int>()
+    var cost = listOf<Int>()
+
+    for (i in treasures) {
+        weight = weight + i.value.first
+        cost = cost + i.value.second
+    }
+
+    for (i in 0..treasures.size) {
+        data[i][0] = 0
+    }
+    for (i in 0..capacity) {
+        data[0][i] = 0
+    }
+
+    for (i in 1..treasures.size) {
+        for (j in 1..capacity) {
+            if (j >= weight[i - 1]) data[i][j] = max(data[i - 1][j], data[i - 1][j - weight[i - 1]] + cost[i - 1])
+            else data[i][j] = data[i - 1][j]
+        }
+    }
+
+
+    var stringForAns = listOf<String>()
+    var x = 0
+    for (i in treasures) {
+        stringForAns = stringForAns + i.key
+        x++
+    }
+
+    fun ansFind(a: Int, b: Int): Int {
+        if (data[a][b] == 0) return 0
+        if (data[a - 1][b] == data[a][b]) ansFind(a - 1, b)
+        else {
+            ansFind(a - 1, b - weight[a - 1])
+            ans.add(stringForAns[a - 1])
+        }
+        return 0
+    }
+
+    ansFind(treasures.size, capacity)
+
+    return ans
+}
