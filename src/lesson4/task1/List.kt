@@ -257,7 +257,6 @@ fun roman(n: Int): String {
     while (lengthOfNumber > 0) {
         val x = number / 10.0.pow(lengthOfNumber-1.toDouble()).toInt()
         number %= 10.0.pow(lengthOfNumber - 1.toDouble()).toInt()
-        var y = digitNumber(number)
         var i = 0
         when (lengthOfNumber) {
             4 -> i = 7
@@ -267,23 +266,14 @@ fun roman(n: Int): String {
         }
         when (x) {
             1 -> string.append(const[i - 1])
-         //   1 -> string = string + const[i - 1]
             2 -> string.append(const[i - 1],const[i - 1])
-         //   2 -> string = string + const[i - 1] + const[i - 1]
             3 -> string.append(const[i - 1],const[i - 1],const[i - 1])
-         //   3 -> string = string + const[i - 1] + const[i - 1] + const[i - 1]
             4 -> string.append(const[i - 1],const[i])
-         //   4 -> string = string + const[i - 1] + const[i]
             5 -> string.append(const[i])
-         //   5 -> string = string + const[i]
             6 -> string.append(const[i],const[i - 1])
-         //   6 -> string = string + const[i] + const[i - 1]
             7 -> string.append(const[i],const[i - 1],const[i - 1])
-          //  7 -> string = string + const[i] + const[i - 1] + const[i - 1]
             8 -> string.append(const[i],const[i - 1],const[i - 1],const[i - 1])
-         //   8 -> string = string + const[i] + const[i - 1] + const[i - 1] + const[i - 1]
             9 -> string.append(const[i - 1],const[i + 1])
-         //   9 -> string = string + const[i - 1] + const[i + 1]
             else -> break
         }
         lengthOfNumber = digitNumber(number)
@@ -379,10 +369,7 @@ fun russian(n: Int): String {
             else ans.add("тысяч")
         }
     }
-    var finalAns = StringBuilder()
-    for (i in 0..ans.size-1) {
-        finalAns.append(ans[i])
-        if (i != ans.size-1) finalAns.append(" ")
-    }
-    return finalAns.toString()
+    var ansFinl = ""
+    ansFinl = ans.joinToString(separator = " ")
+    return ansFinl
 }
