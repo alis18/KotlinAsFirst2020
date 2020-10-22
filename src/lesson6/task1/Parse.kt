@@ -180,6 +180,7 @@ fun fromRoman(roman: String): Int {
     var Roma = mutableMapOf<Char, Int>('I' to 1, 'V' to 5, 'X' to 10, 'L' to 50, 'C' to 100, 'D' to 500, 'M' to 1000)
     var i = 0
     var sumForAns = 0
+    if (roman.length == 0) return -1
     try {
         while (i < roman.length) {
             if (roman.length - i > 3) {
