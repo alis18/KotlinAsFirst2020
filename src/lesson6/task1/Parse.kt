@@ -176,18 +176,18 @@ fun mostExpensive(description: String): String = TODO()
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
-    var table = listOf<Char>('I', 'V', 'X', 'L', 'C', 'D', 'M')
-    var Roma = mutableMapOf<Char, Int>('I' to 1, 'V' to 5, 'X' to 10, 'L' to 50, 'C' to 100, 'D' to 500, 'M' to 1000)
+    var table = setOf<Char>('I', 'V', 'X', 'L', 'C', 'D', 'M')
+    var roma = mutableMapOf<Char, Int>('I' to 1, 'V' to 5, 'X' to 10, 'L' to 50, 'C' to 100, 'D' to 500, 'M' to 1000)
     var i = 0
     var sumForAns = 0
-    if (roman.length == 0) return -1
+    if (roman.isEmpty()) return -1
     try {
         while (i < roman.length) {
             if (roman.length - i > 3) {
                 if (table.indexOf(roman[i]) == table.indexOf(roman[i + 1]) + 1 &&
                     table.indexOf(roman[i]) == table.indexOf(roman[i + 2]) + 1 &&
                     table.indexOf(roman[i]) == table.indexOf(roman[i + 3]) + 1) {
-                    sumForAns += Roma[roman[i]]!!.toInt() + Roma[roman[i + 1]]!!.toInt() + Roma[roman[i + 2]]!!.toInt() + Roma[roman[i + 3]]!!.toInt()
+                    sumForAns += roma[roman[i]]!!.toInt() + roma[roman[i + 1]]!!.toInt() + roma[roman[i + 2]]!!.toInt() + roma[roman[i + 3]]!!.toInt()
                     i += 4
                     continue
                 }
@@ -195,47 +195,48 @@ fun fromRoman(roman: String): Int {
             if (roman.length - i > 2) {
                 if (table.indexOf(roman[i]) == table.indexOf(roman[i + 1]) &&
                     table.indexOf(roman[i + 1]) == table.indexOf(roman[i + 2])) {
-                    sumForAns += Roma[roman[i]]!!.toInt() + Roma[roman[i]]!!.toInt() + Roma[roman[i]]!!.toInt()
+                    sumForAns += roma[roman[i]]!!.toInt() + roma[roman[i]]!!.toInt() + roma[roman[i]]!!.toInt()
                     i += 3
                     continue
                 }
                 if (table.indexOf(roman[i]) == table.indexOf(roman[i + 1]) + 1 &&
                     table.indexOf(roman[i]) == table.indexOf(roman[i + 2]) + 1) {
-                    sumForAns += Roma[roman[i]]!!.toInt() + Roma[roman[i + 1]]!!.toInt() + Roma[roman[i + 1]]!!.toInt()
+                    sumForAns += roma[roman[i]]!!.toInt() + roma[roman[i + 1]]!!.toInt() + roma[roman[i + 1]]!!.toInt()
                     i += 3
                     continue
                 }
             }
             if (roman.length - i > 1) {
                 if (table.indexOf(roman[i]) == table.indexOf(roman[i + 1])) {
-                    sumForAns += 2 * Roma[roman[i]]!!.toInt()
+                    sumForAns += 2 * roma[roman[i]]!!.toInt()
                     i += 2
                     continue
                 }
                 if (table.indexOf(roman[i]) == table.indexOf(roman[i + 1]) + 1) {
-                    sumForAns += Roma[roman[i]]!!.toInt()
-                    sumForAns += Roma[roman[i + 1]]!!.toInt()
+                    sumForAns += roma[roman[i]]!!.toInt()
+                    sumForAns += roma[roman[i + 1]]!!.toInt()
                     i += 2
                     continue
                 }
                 if (table.indexOf(roman[i]) + 2 == table.indexOf(roman[i + 1])) {
-                    sumForAns += Roma[roman[i + 1]]!!.toInt() - Roma[roman[i]]!!.toInt()
+                    sumForAns += roma[roman[i + 1]]!!.toInt() - roma[roman[i]]!!.toInt()
                     i += 2
                     continue
                 }
                 if (table.indexOf(roman[i]) + 1 == table.indexOf(roman[i + 1])) {
-                    sumForAns += Roma[roman[i + 1]]!!.toInt() - Roma[roman[i]]!!.toInt()
+                    if (table.indexOf(roman[i]) % 2 == 1) throw NullPointerException()
+                    sumForAns += roma[roman[i + 1]]!!.toInt() - roma[roman[i]]!!.toInt()
                     i += 2
                     continue
                 }
             }
             if (roman.length - i > 0) {
-                sumForAns += Roma[roman[i]]!!.toInt()
+                sumForAns += roma[roman[i]]!!.toInt()
                 i++
             }
         }
     }
-    catch (e: Exception) {return -1}
+    catch (e: NullPointerException) {return -1}
     return sumForAns
 }
 
@@ -289,7 +290,6 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var i = 0
 
     fun commanda(instruction: Char, index: Int): Boolean {
-        if (forLimit >= limit) return true
         if (x !in 0..cells - 1) throw IllegalStateException()
         when (instruction) {
             '>' -> {
