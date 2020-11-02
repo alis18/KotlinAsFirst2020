@@ -288,6 +288,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     var x = cells / 2
     var forLimit = 0
     var i = 0
+    var forCycle = 0
 
     fun commanda(instruction: Char, index: Int): Boolean {
         if (x !in 0..cells - 1) throw IllegalStateException()
@@ -310,6 +311,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
             }
             ' ' -> forLimit++
             '[' -> {
+                forCycle = 1
                 if (ans[x] != 0 && forLimit < limit) {
                     var first = index
                     var second = 0
@@ -360,6 +362,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                     forLimit++
                 }
             }
+            ']' -> if (forCycle == 0) throw IllegalArgumentException()
             else -> ""
         }
         if (x !in 0..cells - 1) throw IllegalStateException()
