@@ -182,6 +182,9 @@ fun fromRoman(roman: String): Int {
     var sumForAns = 0
     if (roman.isEmpty()) return -1
     try {
+        for (i in roman) {
+            if (!table.contains(i)) throw NullPointerException()
+        }
         while (i < roman.length) {
             if (roman.length - i > 3) {
                 if (table.indexOf(roman[i]) == table.indexOf(roman[i + 1]) + 1 &&
@@ -224,7 +227,7 @@ fun fromRoman(roman: String): Int {
                     continue
                 }
                 if (table.indexOf(roman[i]) + 1 == table.indexOf(roman[i + 1])) {
-                    if (table.indexOf(roman[i]) % 2 == 1) throw NullPointerException()
+                    if (table.indexOf(roman[i]) % 2 == 1) throw IllegalArgumentException()
                     sumForAns += roma[roman[i + 1]]!!.toInt() - roma[roman[i]]!!.toInt()
                     i += 2
                     continue
@@ -236,6 +239,7 @@ fun fromRoman(roman: String): Int {
             }
         }
     }
+    catch (e: IllegalArgumentException) {return -1}
     catch (e: NullPointerException) {return -1}
     return sumForAns
 }
