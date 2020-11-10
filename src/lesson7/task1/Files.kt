@@ -524,6 +524,35 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             step++
             if (ans >= rhv) break
         }
+        if (ans.toString().length == (ans / rhv * rhv).toString().length + 1 && (lhv/rhv).toString().length == 1) {
+            writer.write(lhv.toString())
+            writer.write(" | ")
+            writer.write(rhv.toString())
+            writer.newLine()
+            writer.write("-")
+            writer.write((ans / rhv * rhv).toString())
+            for (i in 0..lhv.toString().length - (ans / rhv * rhv).toInt().toString().length - 1) writer.write(" ")
+            writer.write("  ")
+            writer.write((lhv / rhv).toString())
+            writer.newLine()
+            var minus = maxOf(ans.toString().length, (ans / rhv * rhv).toInt().toString().length + 1)
+            for (i in 0..minus - 1) writer.write("-")
+            writer.newLine()
+            var x =
+                (ans / rhv * rhv).toInt().toString().length + 1 - (ans - (ans / rhv * rhv).toInt()).toString().length
+            for (i in 0..x - 1) writer.write(" ")
+            writer.write((ans - (ans / rhv * rhv).toInt()).toString())
+            if (step != lhv.toString().length) writer.write(lhv.toString()[step].toString())
+            var newlhv = lhv.toString()
+            oldans = (ans - (ans / rhv * rhv))
+            if (step != lhv.toString().length) {
+                ans = (ans - (ans / rhv * rhv)) * 10
+                ans += newlhv[step].toString().toInt()
+            } else ans = ans - (ans / rhv * rhv)
+            writer.newLine()
+            otstup = minus - 1
+        }
+        else
         if (ans.toString().length > (ans / rhv * rhv).toInt().toString().length + 1) {
             writer.write(lhv.toString())
             writer.write(" | ")
