@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import kotlin.math.pow
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -63,7 +64,17 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Подчёркивание в середине и/или в конце строк значения не имеет.
  */
 fun deleteMarked(inputName: String, outputName: String) {
-    TODO()
+    var writer = File(outputName).bufferedWriter()
+
+    for (line in File(inputName).readLines()) {
+        if (line.isEmpty()) {
+            writer.newLine()
+            writer.newLine()
+            continue
+        }
+        if (line[0] != '_') writer.write(line)
+    }
+    writer.close()
 }
 
 /**
@@ -75,7 +86,29 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    var ans = mutableMapOf<String, Int>()
+    var substring = substrings.toSet()
+    for (i in substrings) {
+        ans[i] = 0
+    }
+    for (line in File(inputName).readLines()) {
+        for (list in substring) {
+            if (line.toLowerCase().contains(list.toLowerCase())) {
+                for (simbol in 0..line.length - list.length) {
+                    var k = 0
+                    var n = 0
+                    for (i in simbol..simbol + list.length - 1) {
+                        if (line.toLowerCase()[i] != list.toLowerCase()[n]) k = 1
+                        n++
+                    }
+                    if (k == 0) ans[list.toString()] = ans[list.toString()]!! + 1
+                }
+            }
+        }
+    }
+    return ans
+}
 
 
 /**
@@ -268,15 +301,15 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  *
  * Соответствующий выходной файл:
 <html>
-    <body>
-        <p>
-            Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
-            Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
-        </p>
-        <p>
-            Suspendisse <s>et elit in enim tempus iaculis</s>.
-        </p>
-    </body>
+<body>
+<p>
+Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
+Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
+</p>
+<p>
+Suspendisse <s>et elit in enim tempus iaculis</s>.
+</p>
+</body>
 </html>
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
@@ -319,65 +352,65 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  *
  * Пример входного файла:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
-* Утка по-пекински
-    * Утка
-    * Соус
-* Салат Оливье
-    1. Мясо
-        * Или колбаса
-    2. Майонез
-    3. Картофель
-    4. Что-то там ещё
-* Помидоры
-* Фрукты
-    1. Бананы
-    23. Яблоки
-        1. Красные
-        2. Зелёные
+ * Утка по-пекински
+ * Утка
+ * Соус
+ * Салат Оливье
+1. Мясо
+ * Или колбаса
+2. Майонез
+3. Картофель
+4. Что-то там ещё
+ * Помидоры
+ * Фрукты
+1. Бананы
+23. Яблоки
+1. Красные
+2. Зелёные
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  *
  *
  * Соответствующий выходной файл:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
 <html>
-  <body>
-    <p>
-      <ul>
-        <li>
-          Утка по-пекински
-          <ul>
-            <li>Утка</li>
-            <li>Соус</li>
-          </ul>
-        </li>
-        <li>
-          Салат Оливье
-          <ol>
-            <li>Мясо
-              <ul>
-                <li>Или колбаса</li>
-              </ul>
-            </li>
-            <li>Майонез</li>
-            <li>Картофель</li>
-            <li>Что-то там ещё</li>
-          </ol>
-        </li>
-        <li>Помидоры</li>
-        <li>Фрукты
-          <ol>
-            <li>Бананы</li>
-            <li>Яблоки
-              <ol>
-                <li>Красные</li>
-                <li>Зелёные</li>
-              </ol>
-            </li>
-          </ol>
-        </li>
-      </ul>
-    </p>
-  </body>
+<body>
+<p>
+<ul>
+<li>
+Утка по-пекински
+<ul>
+<li>Утка</li>
+<li>Соус</li>
+</ul>
+</li>
+<li>
+Салат Оливье
+<ol>
+<li>Мясо
+<ul>
+<li>Или колбаса</li>
+</ul>
+</li>
+<li>Майонез</li>
+<li>Картофель</li>
+<li>Что-то там ещё</li>
+</ol>
+</li>
+<li>Помидоры</li>
+<li>Фрукты
+<ol>
+<li>Бананы</li>
+<li>Яблоки
+<ol>
+<li>Красные</li>
+<li>Зелёные</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</p>
+</body>
 </html>
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
@@ -404,23 +437,23 @@ fun markdownToHtml(inputName: String, outputName: String) {
  * Вывести в выходной файл процесс умножения столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 111):
-   19935
-*    111
+19935
+ *    111
 --------
-   19935
+19935
 + 19935
 +19935
 --------
- 2212785
+2212785
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  * Нули в множителе обрабатывать так же, как и остальные цифры:
-  235
-*  10
+235
+ *  10
 -----
-    0
+0
 +235
 -----
- 2350
+2350
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
@@ -434,21 +467,151 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  * Вывести в выходной файл процесс деления столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 22):
-  19935 | 22
- -198     906
- ----
-    13
-    -0
-    --
-    135
-   -132
-   ----
-      3
+19935 | 22
+-198     906
+----
+13
+-0
+--
+135
+-132
+----
+3
 
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
-}
+    var writer = File(outputName).bufferedWriter()
+    var ans = lhv
+    var del = 0
+    var otstup = 0
+    var otv = 0
+    var step = 0
+    var oldans = -1
 
+    if (lhv < rhv) {
+        if (lhv.toString().length > 1) {
+            writer.write(lhv.toString())
+            writer.write(" | ")
+            writer.write(rhv.toString())
+            writer.newLine()
+            for (i in 0..lhv.toString().length - 3) writer.write(" ")
+            writer.write("-0   0")
+            writer.newLine()
+            for (i in 0..lhv.toString().length - 1) writer.write("-")
+            writer.newLine()
+            writer.write(lhv.toString())
+            writer.close()
+        } else {
+            writer.write(" ")
+            writer.write(lhv.toString())
+            writer.write(" | ")
+            writer.write(rhv.toString())
+            writer.newLine()
+            writer.write("-0   0")
+            writer.newLine()
+            writer.write("--")
+            writer.newLine()
+            writer.write(" ")
+            writer.write(lhv.toString())
+            writer.close()
+        }
+    } else {
+
+        for (i in lhv.toString().length - 1 downTo 0) {
+            ans = lhv / 10.0.pow(i).toInt()
+            step++
+            if (ans >= rhv) break
+        }
+        if (ans.toString().length > (ans / rhv * rhv).toInt().toString().length + 1) {
+            writer.write(lhv.toString())
+            writer.write(" | ")
+            writer.write(rhv.toString())
+            writer.newLine()
+            otstup += ans.toString().length
+            for (i in 0..otstup - 2) writer.write(" ")
+            writer.write("-")
+            writer.write((ans / rhv * rhv).toString())
+            for (i in 0..lhv.toString().length - (otstup - 2)) writer.write(" ")
+            writer.write(" | ")
+            writer.write(rhv)
+            writer.newLine()
+            otstup -= ans.toString().length - (ans / rhv * rhv).toInt().toString().length - 1
+            for (i in 0..otstup - 1) writer.write(" ")
+            for (i in 0..otstup - 1) writer.write(" ")
+            var minus = maxOf(ans.toString().length, (ans / rhv * rhv).toInt().toString().length + 1)
+            for (i in 0..minus - 1) writer.write("-")
+            writer.newLine()
+            otstup += ans.toString().length - (ans / rhv * rhv).toInt().toString().length - 1
+            otstup -= (ans - (ans / rhv * rhv).toInt()).toString().length
+            writer.write((ans - (ans / rhv * rhv).toInt()).toString())
+            writer.write(lhv.toString()[step].toString())
+            var newlhv = lhv.toString()
+            oldans = ans
+            ans = (ans - (ans / rhv * rhv)) * 10
+            ans += newlhv[step].toString().toInt()
+            writer.newLine()
+        } else {
+            writer.write(" ")
+            writer.write(lhv.toString())
+            writer.write(" | ")
+            writer.write(rhv.toString())
+            writer.newLine()
+            writer.write("-")
+            writer.write((ans / rhv * rhv).toString())
+            for (i in 0..lhv.toString().length - (ans / rhv * rhv).toInt().toString().length - 1) writer.write(" ")
+            writer.write("   ")
+            writer.write((lhv / rhv).toString())
+            writer.newLine()
+            var minus = maxOf(ans.toString().length, (ans / rhv * rhv).toInt().toString().length + 1)
+            for (i in 0..minus - 1) writer.write("-")
+            writer.newLine()
+            var x =
+                (ans / rhv * rhv).toInt().toString().length + 1 - (ans - (ans / rhv * rhv).toInt()).toString().length
+            for (i in 0..x - 1) writer.write(" ")
+            writer.write((ans - (ans / rhv * rhv).toInt()).toString())
+            if (step != lhv.toString().length) writer.write(lhv.toString()[step].toString())
+            var newlhv = lhv.toString()
+            oldans = (ans - (ans / rhv * rhv))
+            if (step != lhv.toString().length) {
+                ans = (ans - (ans / rhv * rhv)) * 10
+                ans += newlhv[step].toString().toInt()
+            } else ans = ans - (ans / rhv * rhv)
+            writer.newLine()
+            otstup = minus - 1
+        }
+        if (ans.toString().length > 2) otstup -= ans.toString().length - 2
+        while (ans >= rhv || step < lhv.toString().length) {
+            if (oldans == 0) otstup++
+            step++
+            del = (ans / rhv * rhv).toInt()
+            otv = ans - del
+            otstup += ans.toString().length - del.toString().length - 1
+            for (i in 0..otstup - 1) writer.write(" ")
+            writer.write("-")
+            writer.write(del.toString())
+            writer.newLine()
+            var minus = maxOf(ans.toString().length, del.toString().length + 1)
+            if (ans.toString().length != del.toString().length) otstup -= ans.toString().length - del.toString().length - 1
+            for (i in 0..otstup - 1) writer.write(" ")
+            for (i in 0..minus - 1) writer.write("-")
+            writer.newLine()
+            if (ans.toString().length != otv.toString().length)
+                otstup += ans.toString().length - otv.toString().length + 1
+            if (otv == 0 && oldans == 0) otstup++ else
+                if (ans.toString().length == del.toString().length && ans.toString().length == otv.toString().length) otstup++
+                else if (ans.toString().length == del.toString().length + 1 && ans.toString().length == otv.toString().length + 1) otstup--
+            oldans = otv
+            for (i in 0..otstup - 1) writer.write(" ")
+            writer.write(otv.toString())
+            if (step <= lhv.toString().length - 1) {
+                writer.write(lhv.toString()[step].toString())
+                ans = otv * 10 + lhv.toString()[step].toString().toInt()
+                writer.newLine()
+            } else ans = otv
+
+        }
+        writer.close()
+    }
+}
