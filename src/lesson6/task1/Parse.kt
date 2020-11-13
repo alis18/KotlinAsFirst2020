@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence")
+@file:Suppress("UNUSED_PARAMETER", "ConvertCallChainIntoSequence", "TYPE_INFERENCE_ONLY_INPUT_TYPES_WARNING")
 
 package lesson6.task1
 
@@ -176,71 +176,70 @@ fun mostExpensive(description: String): String = TODO()
  * Вернуть -1, если roman не является корректным римским числом
  */
 fun fromRoman(roman: String): Int {
-    var table = setOf<Char>('I', 'V', 'X', 'L', 'C', 'D', 'M')
+    var table = mapOf<Char, Int>('I' to 0, 'V' to 1, 'X' to 2, 'L' to 3, 'C' to 4, 'D' to 5, 'M' to 6)
     var roma = mutableMapOf<Char, Int>('I' to 1, 'V' to 5, 'X' to 10, 'L' to 50, 'C' to 100, 'D' to 500, 'M' to 1000)
     var i = 0
     var sumForAns = 0
     if (roman.isEmpty()) return -1
-    try {
-        for (i in roman) {
-            if (!table.contains(i)) throw NullPointerException()
+    for (i in roman) {
+        if (!table.containsKey(i)) return -1
+    }
+    while (i < roman.length) {
+        if (roman.length - i > 3) {
+            if (table[roman[i]] == table[roman[i + 1]]!! + 1 &&
+                table[roman[i]] == table[roman[i + 2]]!! + 1 &&
+                table[roman[i]] == table[roman[i + 3]]!! + 1
+            ) {
+                sumForAns += roma[roman[i]]!!.toInt() + roma[roman[i + 1]]!!.toInt() + roma[roman[i + 2]]!!.toInt() + roma[roman[i + 3]]!!.toInt()
+                i += 4
+                continue
+            }
         }
-        while (i < roman.length) {
-            if (roman.length - i > 3) {
-                if (table.indexOf(roman[i]) == table.indexOf(roman[i + 1]) + 1 &&
-                    table.indexOf(roman[i]) == table.indexOf(roman[i + 2]) + 1 &&
-                    table.indexOf(roman[i]) == table.indexOf(roman[i + 3]) + 1) {
-                    sumForAns += roma[roman[i]]!!.toInt() + roma[roman[i + 1]]!!.toInt() + roma[roman[i + 2]]!!.toInt() + roma[roman[i + 3]]!!.toInt()
-                    i += 4
-                    continue
-                }
+        if (roman.length - i > 2) {
+            if (table[roman[i]] == table[roman[i + 1]] &&
+                table[roman[i + 1]] == table[roman[i + 2]]
+            ) {
+                sumForAns += roma[roman[i]]!!.toInt() + roma[roman[i]]!!.toInt() + roma[roman[i]]!!.toInt()
+                i += 3
+                continue
             }
-            if (roman.length - i > 2) {
-                if (table.indexOf(roman[i]) == table.indexOf(roman[i + 1]) &&
-                    table.indexOf(roman[i + 1]) == table.indexOf(roman[i + 2])) {
-                    sumForAns += roma[roman[i]]!!.toInt() + roma[roman[i]]!!.toInt() + roma[roman[i]]!!.toInt()
-                    i += 3
-                    continue
-                }
-                if (table.indexOf(roman[i]) == table.indexOf(roman[i + 1]) + 1 &&
-                    table.indexOf(roman[i]) == table.indexOf(roman[i + 2]) + 1) {
-                    sumForAns += roma[roman[i]]!!.toInt() + roma[roman[i + 1]]!!.toInt() + roma[roman[i + 1]]!!.toInt()
-                    i += 3
-                    continue
-                }
+            if (table[roman[i]] == table[roman[i + 1]]!! + 1 &&
+                table[roman[i]] == table[roman[i + 2]]!! + 1
+            ) {
+                sumForAns += roma[roman[i]]!!.toInt() + roma[roman[i + 1]]!!.toInt() + roma[roman[i + 1]]!!.toInt()
+                i += 3
+                continue
             }
-            if (roman.length - i > 1) {
-                if (table.indexOf(roman[i]) == table.indexOf(roman[i + 1])) {
-                    sumForAns += 2 * roma[roman[i]]!!.toInt()
-                    i += 2
-                    continue
-                }
-                if (table.indexOf(roman[i]) == table.indexOf(roman[i + 1]) + 1) {
-                    sumForAns += roma[roman[i]]!!.toInt()
-                    sumForAns += roma[roman[i + 1]]!!.toInt()
-                    i += 2
-                    continue
-                }
-                if (table.indexOf(roman[i]) + 2 == table.indexOf(roman[i + 1])) {
-                    sumForAns += roma[roman[i + 1]]!!.toInt() - roma[roman[i]]!!.toInt()
-                    i += 2
-                    continue
-                }
-                if (table.indexOf(roman[i]) + 1 == table.indexOf(roman[i + 1])) {
-                    if (table.indexOf(roman[i]) % 2 == 1) throw IllegalArgumentException()
-                    sumForAns += roma[roman[i + 1]]!!.toInt() - roma[roman[i]]!!.toInt()
-                    i += 2
-                    continue
-                }
+        }
+        if (roman.length - i > 1) {
+            if (table[roman[i]] == table[roman[i + 1]]) {
+                sumForAns += 2 * roma[roman[i]]!!.toInt()
+                i += 2
+                continue
             }
-            if (roman.length - i > 0) {
+            if (table[roman[i]] == table[roman[i + 1]]!! + 1) {
                 sumForAns += roma[roman[i]]!!.toInt()
-                i++
+                sumForAns += roma[roman[i + 1]]!!.toInt()
+                i += 2
+                continue
             }
+            if (table[roman[i]]!! + 2 == table[roman[i + 1]]) {
+                sumForAns += roma[roman[i + 1]]!!.toInt() - roma[roman[i]]!!.toInt()
+                i += 2
+                continue
+            }
+            if (table[roman[i]]!! + 1 == table[roman[i + 1]]) {
+                if (table[roman[i]]!! % 2 == 1) return -1
+                sumForAns += roma[roman[i + 1]]!!.toInt() - roma[roman[i]]!!.toInt()
+                i += 2
+                continue
+            }
+        }
+        if (roman.length - i > 0) {
+            sumForAns += roma[roman[i]]!!.toInt()
+            i++
         }
     }
-    catch (e: IllegalArgumentException) {return -1}
-    catch (e: NullPointerException) {return -1}
     return sumForAns
 }
 
