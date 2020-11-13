@@ -285,7 +285,8 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     for (com in commands) {
         if (com != '+' && com != '-' && com != '<' && com != '>' && com != ' ' && com != '[' && com != ']') throw IllegalArgumentException()
         if (com == '[') score++
-        if (com == ']') score--
+        if (com == ']' && score == 0) throw IllegalArgumentException() else
+            if (com == ']') score--
     }
     if (score != 0) throw IllegalArgumentException()
     var x = cells / 2
