@@ -623,8 +623,12 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                 if (otv == 0 && oldans == 0) indent++ else
                     if (ans.toString().length == del.toString().length && ans.toString().length == otv.toString().length) indent++
                     else if (ans.toString().length == del.toString().length + 1 && ans.toString().length == otv.toString().length + 1) indent--
+                if (ans.toString().length == del.toString().length + 1 &&
+                    del.toString().length != otv.toString().length &&
+                    step > lhv.toString().length - 1
+                ) for (i in 0..indent - 2) writer.write(" ")
+                else for (i in 0..indent - 1) writer.write(" ")
                 oldans = otv
-                for (i in 0..indent - 1) writer.write(" ")
                 writer.write(otv.toString())
                 if (step <= lhv.toString().length - 1) {
                     writer.write(lhv.toString()[step].toString())
