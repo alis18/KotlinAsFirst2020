@@ -85,10 +85,10 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     for (line in File(inputName).readLines()) {
         for (list in substring) {
             if (line.toLowerCase().contains(list.toLowerCase())) {
-                for (simbol in 0..line.length - list.length) {
+                for (symbol in 0..line.length - list.length) {
                     var k = 0
                     var n = 0
-                    for (i in simbol..simbol + list.length - 1) {
+                    for (i in symbol..symbol + list.length - 1) {
                         if (line.toLowerCase()[i] != list.toLowerCase()[n]) k = 1
                         n++
                     }
@@ -475,162 +475,163 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     var writer = File(outputName).bufferedWriter()
     var ans = lhv
     var del = 0
-    var otstup = 0
+    var indent = 0
     var otv = 0
     var step = 0
     var oldans = -1
-
-    if (lhv < rhv) {
-        if (lhv.toString().length > 1) {
-            writer.write(lhv.toString())
-            writer.write(" | ")
-            writer.write(rhv.toString())
-            writer.newLine()
-            for (i in 0..lhv.toString().length - 3) writer.write(" ")
-            writer.write("-0   0")
-            writer.newLine()
-            for (i in 0..lhv.toString().length - 1) writer.write("-")
-            writer.newLine()
-            writer.write(lhv.toString())
-            writer.close()
-        } else {
-            writer.write(" ")
-            writer.write(lhv.toString())
-            writer.write(" | ")
-            writer.write(rhv.toString())
-            writer.newLine()
-            writer.write("-0   0")
-            writer.newLine()
-            writer.write("--")
-            writer.newLine()
-            writer.write(" ")
-            writer.write(lhv.toString())
-            writer.close()
-        }
-    } else {
-
-        for (i in lhv.toString().length - 1 downTo 0) {
-            ans = lhv / 10.0.pow(i).toInt()
-            step++
-            if (ans >= rhv) break
-        }
-        if (ans.toString().length == (ans / rhv * rhv).toString().length + 1 && (lhv/rhv).toString().length == 1) {
-            writer.write(lhv.toString())
-            writer.write(" | ")
-            writer.write(rhv.toString())
-            writer.newLine()
-            writer.write("-")
-            writer.write((ans / rhv * rhv).toString())
-            for (i in 0..lhv.toString().length - (ans / rhv * rhv).toInt().toString().length - 1) writer.write(" ")
-            writer.write("  ")
-            writer.write((lhv / rhv).toString())
-            writer.newLine()
-            var minus = maxOf(ans.toString().length, (ans / rhv * rhv).toInt().toString().length + 1)
-            for (i in 0..minus - 1) writer.write("-")
-            writer.newLine()
-            var x =
-                (ans / rhv * rhv).toInt().toString().length + 1 - (ans - (ans / rhv * rhv).toInt()).toString().length
-            for (i in 0..x - 1) writer.write(" ")
-            writer.write((ans - (ans / rhv * rhv).toInt()).toString())
-            if (step != lhv.toString().length) writer.write(lhv.toString()[step].toString())
-            var newlhv = lhv.toString()
-            oldans = (ans - (ans / rhv * rhv))
-            if (step != lhv.toString().length) {
-                ans = (ans - (ans / rhv * rhv)) * 10
-                ans += newlhv[step].toString().toInt()
-            } else ans = ans - (ans / rhv * rhv)
-            writer.newLine()
-            otstup = minus - 1
-        }
-        else
-        if (ans.toString().length > (ans / rhv * rhv).toInt().toString().length + 1) {
-            writer.write(lhv.toString())
-            writer.write(" | ")
-            writer.write(rhv.toString())
-            writer.newLine()
-            otstup += ans.toString().length
-            for (i in 0..otstup - 2) writer.write(" ")
-            writer.write("-")
-            writer.write((ans / rhv * rhv).toString())
-            for (i in 0..lhv.toString().length - (otstup - 2)) writer.write(" ")
-            writer.write(" | ")
-            writer.write(rhv)
-            writer.newLine()
-            otstup -= ans.toString().length - (ans / rhv * rhv).toInt().toString().length - 1
-            for (i in 0..otstup - 1) writer.write(" ")
-            for (i in 0..otstup - 1) writer.write(" ")
-            var minus = maxOf(ans.toString().length, (ans / rhv * rhv).toInt().toString().length + 1)
-            for (i in 0..minus - 1) writer.write("-")
-            writer.newLine()
-            otstup += ans.toString().length - (ans / rhv * rhv).toInt().toString().length - 1
-            otstup -= (ans - (ans / rhv * rhv).toInt()).toString().length
-            writer.write((ans - (ans / rhv * rhv).toInt()).toString())
-            writer.write(lhv.toString()[step].toString())
-            var newlhv = lhv.toString()
-            oldans = ans
-            ans = (ans - (ans / rhv * rhv)) * 10
-            ans += newlhv[step].toString().toInt()
-            writer.newLine()
-        } else {
-            writer.write(" ")
-            writer.write(lhv.toString())
-            writer.write(" | ")
-            writer.write(rhv.toString())
-            writer.newLine()
-            writer.write("-")
-            writer.write((ans / rhv * rhv).toString())
-            for (i in 0..lhv.toString().length - (ans / rhv * rhv).toInt().toString().length - 1) writer.write(" ")
-            writer.write("   ")
-            writer.write((lhv / rhv).toString())
-            writer.newLine()
-            var minus = maxOf(ans.toString().length, (ans / rhv * rhv).toInt().toString().length + 1)
-            for (i in 0..minus - 1) writer.write("-")
-            writer.newLine()
-            var x =
-                (ans / rhv * rhv).toInt().toString().length + 1 - (ans - (ans / rhv * rhv).toInt()).toString().length
-            for (i in 0..x - 1) writer.write(" ")
-            writer.write((ans - (ans / rhv * rhv).toInt()).toString())
-            if (step != lhv.toString().length) writer.write(lhv.toString()[step].toString())
-            var newlhv = lhv.toString()
-            oldans = (ans - (ans / rhv * rhv))
-            if (step != lhv.toString().length) {
-                ans = (ans - (ans / rhv * rhv)) * 10
-                ans += newlhv[step].toString().toInt()
-            } else ans = ans - (ans / rhv * rhv)
-            writer.newLine()
-            otstup = minus - 1
-        }
-        if (ans.toString().length > 2) otstup -= ans.toString().length - 2
-        while (ans >= rhv || step < lhv.toString().length) {
-            if (oldans == 0) otstup++
-            step++
-            del = (ans / rhv * rhv).toInt()
-            otv = ans - del
-            otstup += ans.toString().length - del.toString().length - 1
-            for (i in 0..otstup - 1) writer.write(" ")
-            writer.write("-")
-            writer.write(del.toString())
-            writer.newLine()
-            var minus = maxOf(ans.toString().length, del.toString().length + 1)
-            if (ans.toString().length != del.toString().length) otstup -= ans.toString().length - del.toString().length - 1
-            for (i in 0..otstup - 1) writer.write(" ")
-            for (i in 0..minus - 1) writer.write("-")
-            writer.newLine()
-            if (ans.toString().length != otv.toString().length)
-                otstup += ans.toString().length - otv.toString().length + 1
-            if (otv == 0 && oldans == 0) otstup++ else
-                if (ans.toString().length == del.toString().length && ans.toString().length == otv.toString().length) otstup++
-                else if (ans.toString().length == del.toString().length + 1 && ans.toString().length == otv.toString().length + 1) otstup--
-            oldans = otv
-            for (i in 0..otstup - 1) writer.write(" ")
-            writer.write(otv.toString())
-            if (step <= lhv.toString().length - 1) {
-                writer.write(lhv.toString()[step].toString())
-                ans = otv * 10 + lhv.toString()[step].toString().toInt()
+    writer.use {
+        if (lhv < rhv) {
+            if (lhv.toString().length > 1) {
+                writer.write(lhv.toString())
+                writer.write(" | ")
+                writer.write(rhv.toString())
                 writer.newLine()
-            } else ans = otv
+                for (i in 0..lhv.toString().length - 3) writer.write(" ")
+                writer.write("-0   0")
+                writer.newLine()
+                for (i in 0..lhv.toString().length - 1) writer.write("-")
+                writer.newLine()
+                writer.write(lhv.toString())
+                writer.close()
+            } else {
+                writer.write(" ")
+                writer.write(lhv.toString())
+                writer.write(" | ")
+                writer.write(rhv.toString())
+                writer.newLine()
+                writer.write("-0   0")
+                writer.newLine()
+                writer.write("--")
+                writer.newLine()
+                writer.write(" ")
+                writer.write(lhv.toString())
+                writer.close()
+            }
+        } else {
 
+            for (i in lhv.toString().length - 1 downTo 0) {
+                ans = lhv / 10.0.pow(i).toInt()
+                step++
+                if (ans >= rhv) break
+            }
+            if (ans.toString().length == (ans / rhv * rhv).toString().length + 1 && (lhv / rhv).toString().length == 1) {
+                writer.write(lhv.toString())
+                writer.write(" | ")
+                writer.write(rhv.toString())
+                writer.newLine()
+                writer.write("-")
+                writer.write((ans / rhv * rhv).toString())
+                for (i in 0..lhv.toString().length - (ans / rhv * rhv).toInt().toString().length - 1) writer.write(" ")
+                writer.write("  ")
+                writer.write((lhv / rhv).toString())
+                writer.newLine()
+                var minus = maxOf(ans.toString().length, (ans / rhv * rhv).toInt().toString().length + 1)
+                for (i in 0..minus - 1) writer.write("-")
+                writer.newLine()
+                var x =
+                    (ans / rhv * rhv).toInt()
+                        .toString().length + 1 - (ans - (ans / rhv * rhv).toInt()).toString().length
+                for (i in 0..x - 1) writer.write(" ")
+                writer.write((ans - (ans / rhv * rhv).toInt()).toString())
+                if (step != lhv.toString().length) writer.write(lhv.toString()[step].toString())
+                var newlhv = lhv.toString()
+                oldans = (ans - (ans / rhv * rhv))
+                if (step != lhv.toString().length) {
+                    ans = (ans - (ans / rhv * rhv)) * 10
+                    ans += newlhv[step].toString().toInt()
+                } else ans = ans - (ans / rhv * rhv)
+                writer.newLine()
+                indent = minus - 1
+            } else
+                if (ans.toString().length > (ans / rhv * rhv).toInt().toString().length + 1) {
+                    writer.write(lhv.toString())
+                    writer.write(" | ")
+                    writer.write(rhv.toString())
+                    writer.newLine()
+                    indent += ans.toString().length
+                    for (i in 0..indent - 2) writer.write(" ")
+                    writer.write("-")
+                    writer.write((ans / rhv * rhv).toString())
+                    for (i in 0..lhv.toString().length - (indent - 2)) writer.write(" ")
+                    writer.write(" | ")
+                    writer.write(rhv)
+                    writer.newLine()
+                    indent -= ans.toString().length - (ans / rhv * rhv).toInt().toString().length - 1
+                    for (i in 0..indent - 1) writer.write(" ")
+                    for (i in 0..indent - 1) writer.write(" ")
+                    var minus = maxOf(ans.toString().length, (ans / rhv * rhv).toInt().toString().length + 1)
+                    for (i in 0..minus - 1) writer.write("-")
+                    writer.newLine()
+                    indent += ans.toString().length - (ans / rhv * rhv).toInt().toString().length - 1
+                    indent -= (ans - (ans / rhv * rhv).toInt()).toString().length
+                    writer.write((ans - (ans / rhv * rhv).toInt()).toString())
+                    writer.write(lhv.toString()[step].toString())
+                    var newlhv = lhv.toString()
+                    oldans = ans
+                    ans = (ans - (ans / rhv * rhv)) * 10
+                    ans += newlhv[step].toString().toInt()
+                    writer.newLine()
+                } else {
+                    writer.write(" ")
+                    writer.write(lhv.toString())
+                    writer.write(" | ")
+                    writer.write(rhv.toString())
+                    writer.newLine()
+                    writer.write("-")
+                    writer.write((ans / rhv * rhv).toString())
+                    for (i in 0..lhv.toString().length - (ans / rhv * rhv).toInt()
+                        .toString().length - 1) writer.write(" ")
+                    writer.write("   ")
+                    writer.write((lhv / rhv).toString())
+                    writer.newLine()
+                    var minus = maxOf(ans.toString().length, (ans / rhv * rhv).toInt().toString().length + 1)
+                    for (i in 0..minus - 1) writer.write("-")
+                    writer.newLine()
+                    var x =
+                        (ans / rhv * rhv).toInt()
+                            .toString().length + 1 - (ans - (ans / rhv * rhv).toInt()).toString().length
+                    for (i in 0..x - 1) writer.write(" ")
+                    writer.write((ans - (ans / rhv * rhv).toInt()).toString())
+                    if (step != lhv.toString().length) writer.write(lhv.toString()[step].toString())
+                    var newlhv = lhv.toString()
+                    oldans = (ans - (ans / rhv * rhv))
+                    if (step != lhv.toString().length) {
+                        ans = (ans - (ans / rhv * rhv)) * 10
+                        ans += newlhv[step].toString().toInt()
+                    } else ans = ans - (ans / rhv * rhv)
+                    writer.newLine()
+                    indent = minus - 1
+                }
+            if (ans.toString().length > 2) indent -= ans.toString().length - 2
+            while (ans >= rhv || step < lhv.toString().length) {
+                if (oldans == 0) indent++
+                step++
+                del = (ans / rhv * rhv).toInt()
+                otv = ans - del
+                indent += ans.toString().length - del.toString().length - 1
+                for (i in 0..indent - 1) writer.write(" ")
+                writer.write("-")
+                writer.write(del.toString())
+                writer.newLine()
+                var minus = maxOf(ans.toString().length, del.toString().length + 1)
+                if (ans.toString().length != del.toString().length) indent -= ans.toString().length - del.toString().length - 1
+                for (i in 0..indent - 1) writer.write(" ")
+                for (i in 0..minus - 1) writer.write("-")
+                writer.newLine()
+                if (ans.toString().length != otv.toString().length)
+                    indent += ans.toString().length - otv.toString().length + 1
+                if (otv == 0 && oldans == 0) indent++ else
+                    if (ans.toString().length == del.toString().length && ans.toString().length == otv.toString().length) indent++
+                    else if (ans.toString().length == del.toString().length + 1 && ans.toString().length == otv.toString().length + 1) indent--
+                oldans = otv
+                for (i in 0..indent - 1) writer.write(" ")
+                writer.write(otv.toString())
+                if (step <= lhv.toString().length - 1) {
+                    writer.write(lhv.toString()[step].toString())
+                    ans = otv * 10 + lhv.toString()[step].toString().toInt()
+                    writer.newLine()
+                } else ans = otv
+            }
         }
-        writer.close()
     }
 }
