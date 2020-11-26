@@ -167,7 +167,44 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    var writer = File(outputName).bufferedWriter()
+    var max = -1
+    for (line in File(inputName).readLines()) {
+        if (line.trim().length > max) max = line.trim().length
+    }
+    for (line in File(inputName).readLines()) {
+        if (line.isEmpty() || line.all { it.toChar() == ' ' }) writer.newLine() else {
+            var words = line.trim().split(" ")
+            var sumOfLength = 0
+            var sumOfWords = 0
+            for (word in words) {
+                sumOfLength += word.toString().trim().length
+                sumOfWords++
+            }
+            if (sumOfWords == 1) {
+                writer.write(words[0].toString())
+                writer.newLine()
+            } else {
+                var spaces = max - sumOfLength
+                spaces = spaces / (sumOfWords - 1)
+                var otherSpces = spaces * (sumOfWords - 1)
+                println(spaces)
+                println(otherSpces)
+                otherSpces = (max - sumOfLength) - otherSpces
+                println(otherSpces)
+                for (i in 0..sumOfWords - 1) {
+                    writer.write(words[i].trim().toString())
+                    if (i != sumOfWords - 1) for (j in 0..spaces - 1) writer.write(" ")
+                    if (otherSpces > 0 && i != sumOfWords - 1) {
+                        writer.write(" ")
+                        otherSpces--
+                    }
+                }
+                writer.newLine()
+            }
+        }
+    }
+    writer.close()
 }
 
 /**
