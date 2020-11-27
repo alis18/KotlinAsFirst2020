@@ -174,22 +174,25 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     }
     for (line in File(inputName).readLines()) {
         if (line.isEmpty() || line.all { it.toChar() == ' ' }) writer.newLine() else {
-            var words = line.trim().split(" ")
+            var words = line.trim().split(Regex("""\s+"""))
             var sumOfLength = 0
             var sumOfWords = 0
             for (word in words) {
                 sumOfLength += word.toString().trim().length
                 sumOfWords++
             }
+            println(words)
+            println("sum")
+            println(sumOfWords)
             if (sumOfWords == 1) {
                 writer.write(words[0].toString())
                 writer.newLine()
             } else {
                 var spaces = max - sumOfLength
-                spaces = spaces / (sumOfWords - 1)
-                var otherSpces = spaces * (sumOfWords - 1)
                 println(spaces)
-                println(otherSpces)
+                spaces = spaces / (sumOfWords - 1)
+                println(spaces)
+                var otherSpces = spaces * (sumOfWords - 1)
                 otherSpces = (max - sumOfLength) - otherSpces
                 println(otherSpces)
                 for (i in 0..sumOfWords - 1) {
