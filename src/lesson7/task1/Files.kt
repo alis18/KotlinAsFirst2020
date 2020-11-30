@@ -178,11 +178,11 @@ fun alignFileByWidth(inputName: String, outputName: String) {
             var sumOfLength = 0
             var sumOfWords = 0
             for (word in words) {
-                sumOfLength += word.trim().length
+                sumOfLength += word.length
                 sumOfWords++
             }
             if (sumOfWords == 1) {
-                writer.write(words[0].toString())
+                writer.write(words[0])
                 writer.newLine()
             } else {
                 var spaces = max - sumOfLength
@@ -190,7 +190,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
                 var otherSpces = spaces * (sumOfWords - 1)
                 otherSpces = (max - sumOfLength) - otherSpces
                 for (i in 0..sumOfWords - 1) {
-                    writer.write(words[i].trim().toString())
+                    writer.write(words[i])
                     if (i != sumOfWords - 1) writer.write(" ".repeat(spaces))
                     if (otherSpces > 0 && i != sumOfWords - 1) {
                         writer.write(" ")
