@@ -12,12 +12,16 @@ internal class UnsignedBigIntegerTest {
     @Tag("8")
     fun plus() {
         assertEquals(UnsignedBigInteger(3), UnsignedBigInteger(2) + UnsignedBigInteger(1))
+        assertEquals(UnsignedBigInteger(100000), UnsignedBigInteger(99999) + UnsignedBigInteger(1))
         assertEquals(UnsignedBigInteger(2), UnsignedBigInteger(2) + UnsignedBigInteger("000000"))
         assertEquals(UnsignedBigInteger(1002000), UnsignedBigInteger(2000) + UnsignedBigInteger(1000000))
         assertEquals(UnsignedBigInteger(4), UnsignedBigInteger(2) + UnsignedBigInteger(2))
         assertEquals(UnsignedBigInteger(13), UnsignedBigInteger(8) + UnsignedBigInteger(5))
         assertEquals(UnsignedBigInteger("9087654330"), UnsignedBigInteger("9087654329") + UnsignedBigInteger(1))
-        assertEquals( UnsignedBigInteger("4294967295998"), UnsignedBigInteger("${Int.MAX_VALUE}999") + UnsignedBigInteger("${Int.MAX_VALUE}999") )
+        assertEquals(
+            UnsignedBigInteger("4294967295998"),
+            UnsignedBigInteger("${Int.MAX_VALUE}999") + UnsignedBigInteger("${Int.MAX_VALUE}999")
+        )
     }
 
     @Test
@@ -28,10 +32,19 @@ internal class UnsignedBigIntegerTest {
         assertThrows(ArithmeticException::class.java) {
             UnsignedBigInteger(2) - UnsignedBigInteger(4)
         }
-        assertEquals(UnsignedBigInteger("9856809481"),UnsignedBigInteger("14151776777") - UnsignedBigInteger("4294967296"))
-        assertEquals(UnsignedBigInteger("1"),UnsignedBigInteger("14151776777") - UnsignedBigInteger("14151776776"))
-        assertEquals(UnsignedBigInteger("8561957452"),UnsignedBigInteger("18446744073") - UnsignedBigInteger("9884786621"))
-        assertEquals(UnsignedBigInteger("0"),UnsignedBigInteger("18446744073709551616") - UnsignedBigInteger("18446744073709551616"))
+        assertEquals(
+            UnsignedBigInteger("9856809481"),
+            UnsignedBigInteger("14151776777") - UnsignedBigInteger("4294967296")
+        )
+        assertEquals(UnsignedBigInteger("1"), UnsignedBigInteger("14151776777") - UnsignedBigInteger("14151776776"))
+        assertEquals(
+            UnsignedBigInteger("8561957452"),
+            UnsignedBigInteger("18446744073") - UnsignedBigInteger("9884786621")
+        )
+        assertEquals(
+            UnsignedBigInteger("0"),
+            UnsignedBigInteger("18446744073709551616") - UnsignedBigInteger("18446744073709551616")
+        )
     }
 
     @Test

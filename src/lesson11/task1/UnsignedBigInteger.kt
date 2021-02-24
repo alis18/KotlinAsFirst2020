@@ -15,7 +15,6 @@ import kotlin.math.pow
  * преобразование в строку/из строки, преобразование в целое/из целого,
  * сравнение на равенство и неравенство
  */
-@Suppress("NAME_SHADOWING")
 class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
 
     var data = mutableListOf<Int>()
@@ -24,12 +23,12 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
      * Конструктор из строки
      */
     constructor(s: String) {
-        val len = s.length
+        var str = s
         if (s.matches(Regex("""0+"""))) data.add(0) else {
-            if (len != 0)
-                for (i in len - 1 downTo 0) {
-                    data.add(s[i].toString().toInt())
-                }
+            while (str[0] == '0') str = str.removeRange(0, 1)
+            for (i in str.length - 1 downTo 0) {
+                data.add(s[i].toString().toInt())
+            }
         }
     }
 
@@ -39,8 +38,8 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
     constructor(i: Int) {
         val s = i.toString()
         val len = s.length
-        for (i in len - 1 downTo 0) {
-            data.add(s[i].toString().toInt())
+        for (j in len - 1 downTo 0) {
+            data.add(s[j].toString().toInt())
         }
     }
 
@@ -56,28 +55,41 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
             ans.add((data[i] + other.data[i]) % 10 + ost)
             ost = (data[i] + other.data[i]) / 10
         }
-        if ((ost == 1) && (minimum == maximum)) ans.add(1)
-        if (minimum != maximum) {
-            for (i in minimum until maximum) {
-                if (ost == 1) {
-                    if ((data.size > other.data.size)) {
+        println(ans)
+        if (ost == 1 && minimum == maximum) {
+            ans.add(1)
+            ost = 0
+        }
+        for (i in minimum until maximum) {
+            if (ost == 0) {
+                if ((data.size > other.data.size)) {
+                    ans.add(data[i])
+                }
+                if ((data.size < other.data.size)) {
+                    ans.add(other.data[i])
+                }
+            } else {
+
+                if ((data.size > other.data.size)) {
+                    if (data[i] + 1 > 9) {
+                        ans.add((data[i] + 1) % 10)
+                    } else {
                         ans.add(data[i] + 1)
                         ost = 0
                     }
-                    if ((data.size < other.data.size)) {
+                }
+                if ((data.size < other.data.size)) {
+                    if (other.data[i] + 1 > 9) {
+                        ans.add((other.data[i] + 1) % 10)
+                    } else {
                         ans.add(other.data[i] + 1)
                         ost = 0
                     }
-                } else {
-                    if ((data.size > other.data.size)) {
-                        ans.add(data[i])
-                    }
-                    if ((data.size < other.data.size)) {
-                        ans.add(other.data[i])
-                    }
                 }
+
             }
         }
+        if (ost == 1) ans.add(1)
         var ansstr = ""
         for (i in ans.size - 1 downTo 0) {
             ansstr = ans[ans.size - i - 1].toString() + ansstr
@@ -90,18 +102,11 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
      */
     operator fun minus(other: UnsignedBigInteger): UnsignedBigInteger {
         val ans = mutableListOf<Int>()
-        if (other.data.size > data.size) throw ArithmeticException()
+        if (other > this) throw ArithmeticException("this < other")
+        if (other == this) return UnsignedBigInteger(0)
         val minimum = min(other.data.size, data.size)
         val maximum = max(other.data.size, data.size)
-        if (other.data.size == data.size) {
-            for (i in data.size - 1 downTo 0) {
-                if (data[i] > other.data[i]) break
-                if (data[i] < other.data[i]) {
-                    throw ArithmeticException()
-                }
-                if (i == 0) return UnsignedBigInteger(0)
-            }
-        }
+
         for (i in 0 until minimum) {
             if (data[i] >= other.data[i]) {
                 ans.add(data[i] - other.data[i])
@@ -131,26 +136,28 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
      * Умножение
      */
     operator fun times(other: UnsignedBigInteger): UnsignedBigInteger {
-        val ans = mutableMapOf<Int, Int>()
-        for (i in 0..max(data.size, other.data.size) * 2) ans[i] = 0
+        //val ans = mutableMapOf<Int, Int>()
+        val ans = MutableList(max(data.size, other.data.size) * 2 + 1) { 0 }
+        //for (i in 0..max(data.size, other.data.size) * 2) ans[i] = 0
+        //println(ans.size)
         var step = 0
         var dopper = 0
         for (i in 0 until other.data.size) {
             for (j in 0 until data.size) {
-                ans[step] = ans[step]!! + ((other.data[i] * data[j] + dopper) % 10)
+                ans[step] = ans[step] + ((other.data[i] * data[j] + dopper) % 10)
                 dopper = (other.data[i] * data[j] + dopper) / 10
                 step++
             }
             if (dopper != 0) {
-                ans[step] = ans[step]!! + dopper
+                ans[step] = ans[step] + dopper
                 dopper = 0
             }
             step = i + 1
         }
         for (i in 0 until ans.size) {
-            if (ans[i]!! >= 10) {
-                ans[i + 1] = ans[i + 1]!! + (ans[i]!! / 10)
-                ans[i] = ans[i]!! % 10
+            if (ans[i] >= 10) {
+                ans[i + 1] = ans[i + 1] + (ans[i] / 10)
+                ans[i] = ans[i] % 10
             }
         }
         var ansstr = ""
@@ -160,6 +167,9 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
                 if (ost == 1) {
                     ansstr += ans[i].toString()
                 }
+            if (i == 1 && ans[0] == 0 && ost == 0) {
+                break
+            }
         }
         if (ansstr == "") ansstr = "0"
         return UnsignedBigInteger(ansstr)
@@ -169,19 +179,8 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
      * Деление
      */
     operator fun div(other: UnsignedBigInteger): UnsignedBigInteger {
-        val maximum: UnsignedBigInteger
-        val minimum: UnsignedBigInteger
-        when {
-            this > other -> {
-                maximum = this
-                minimum = other
-            }
-            else -> {
-                maximum = other
-                minimum = this
-            }
-        }
-
+        val maximum = this
+        val minimum = other
         when {
             maximum.data.size < minimum.data.size -> return UnsignedBigInteger("0")
             maximum == minimum -> return UnsignedBigInteger("1")
@@ -190,28 +189,20 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
                 var ans = ""
                 var step = 0
                 for (i in maximum.data.size - 1 downTo 0) {
-                    println("pos")
-                    println(i)
                     del += maximum.data[i].toString()
-                    println(del)
                     var a = UnsignedBigInteger(del)
                     if (a >= minimum) {
                         while (a >= minimum) {
                             a -= minimum
-                            //println(a)
                             step++
                         }
-                        println(step)
-                        println(minimum)
                         ans = step.toString() + ans
                         step = 0
                         var b = ""
-                        for (i in a.data.size - 1 downTo 0) {
-                            b += a.data[i].toString()
+                        for (j in a.data.size - 1 downTo 0) {
+                            b += a.data[j].toString()
                         }
-
                         del = b
-                        println(del)
                     }
                 }
                 var anslast = ""
@@ -226,21 +217,7 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
     /**
      * Взятие остатка
      */
-    operator fun rem(other: UnsignedBigInteger): UnsignedBigInteger {
-        val maximum: UnsignedBigInteger
-        val minimum: UnsignedBigInteger
-        when {
-            this > other -> {
-                maximum = this
-                minimum = other
-            }
-            else -> {
-                maximum = other
-                minimum = this
-            }
-        }
-        return maximum - maximum / minimum * minimum
-    }
+    operator fun rem(other: UnsignedBigInteger): UnsignedBigInteger = this - this / other * other
 
     /**
      * Сравнение на равенство (по контракту Any.equals)
@@ -274,42 +251,19 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
     /**
      * Преобразование в строку
      */
-    override fun toString(): String {
-        val len = data.size
-        var ansstr = ""
-        for (i in 0 until len) {
-            ansstr = data[len - i - 1].toString() + ansstr
-        }
-        return ansstr
-    }
+    override fun toString(): String = buildString { for (i in data.size downTo 1) append(data[i - 1].toString()) }
 
     /**
      * Преобразование в целое
      * Если число не влезает в диапазон Int, бросить ArithmeticException
      */
     fun toInt(): Int {
-        val len = data.size
         var ansint = 0
-        when {
-            len > 10 -> throw ArithmeticException()
-            len == 10 -> {
-                val int = listOf(2, 1, 4, 7, 4, 8, 3, 6, 4, 7)
-                for (i in 9 downTo 0) {
-                    if (data[i] < int[9 - i]) break
-                    if (data[i] > int[9 - i]) throw ArithmeticException()
-                }
-                var step = 9
-                for (i in 9 downTo 0) {
-                    ansint += data[i] * 10.0.pow(step.toDouble()).toInt()
-                    step--
-                }
-            }
-            len < 10 -> {
-                var step = len - 1
-                for (i in len - 1 downTo 0) {
-                    ansint += data[i] * 10.0.pow(step.toDouble()).toInt()
-                    step--
-                }
+        val int = UnsignedBigInteger(2147483647)
+        if (this > int) throw ArithmeticException("more then int")
+        else {
+            for (i in data.size - 1 downTo 0) {
+                ansint += data[i] * 10.0.pow((i).toDouble()).toInt()
             }
         }
         return ansint
