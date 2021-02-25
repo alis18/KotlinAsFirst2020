@@ -12,6 +12,7 @@ internal class UnsignedBigIntegerTest {
     @Tag("8")
     fun plus() {
         assertEquals(UnsignedBigInteger(3), UnsignedBigInteger(2) + UnsignedBigInteger(1))
+        //assertEquals(UnsignedBigInteger(2100), UnsignedBigInteger(1045) + UnsignedBigInteger(1055))
         assertEquals(UnsignedBigInteger(100000), UnsignedBigInteger(99999) + UnsignedBigInteger(1))
         assertEquals(UnsignedBigInteger(2), UnsignedBigInteger(2) + UnsignedBigInteger("000000"))
         assertEquals(UnsignedBigInteger(1002000), UnsignedBigInteger(2000) + UnsignedBigInteger(1000000))
