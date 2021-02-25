@@ -46,9 +46,7 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
     constructor(list: MutableList<Int>) {
         val newlist = list
         while (newlist.last() == 0 && newlist.lastIndex != 0) newlist.removeAt(newlist.size - 1)
-        for (element in newlist) {
-            data.add(element)
-        }
+        data.addAll(list)
     }
 
     /**
@@ -67,33 +65,21 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
             ans.add(1)
             ost = 0
         }
+        val big: UnsignedBigInteger = if (this > other) {
+            this
+        } else {
+            other
+        }
         for (i in minimum until maximum) {
             if (ost == 0) {
-                if ((data.size > other.data.size)) {
-                    ans.add(data[i])
-                }
-                if ((data.size < other.data.size)) {
-                    ans.add(other.data[i])
-                }
+                ans.add(big.data[i])
             } else {
-
-                if ((data.size > other.data.size)) {
-                    if (data[i] + 1 > 9) {
-                        ans.add((data[i] + 1) % 10)
-                    } else {
-                        ans.add(data[i] + 1)
-                        ost = 0
-                    }
+                if (big.data[i] + 1 > 9) {
+                    ans.add((big.data[i] + 1) % 10)
+                } else {
+                    ans.add(big.data[i] + 1)
+                    ost = 0
                 }
-                if ((data.size < other.data.size)) {
-                    if (other.data[i] + 1 > 9) {
-                        ans.add((other.data[i] + 1) % 10)
-                    } else {
-                        ans.add(other.data[i] + 1)
-                        ost = 0
-                    }
-                }
-
             }
         }
         if (ost == 1) ans.add(1)
@@ -200,11 +186,7 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
      * Сравнение на равенство (по контракту Any.equals)
      */
     override fun equals(other: Any?): Boolean {
-        if ((other !is UnsignedBigInteger) || (data.size != other.data.size)) return false
-        val minimum = min(data.size, other.data.size)
-        for (i in minimum - 1 downTo 0) {
-            if (data[i] != other.data[i]) return false
-        }
+        if ((other !is UnsignedBigInteger) || (data.size != other.data.size) || (data != other.data)) return false
         return true
     }
 
