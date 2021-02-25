@@ -65,11 +65,7 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
             ans.add(1)
             ost = 0
         }
-        val big: UnsignedBigInteger = if (this > other) {
-            this
-        } else {
-            other
-        }
+        val big: UnsignedBigInteger = if (this > other) this else other
         for (i in minimum until maximum) {
             if (ost == 0) {
                 ans.add(big.data[i])
