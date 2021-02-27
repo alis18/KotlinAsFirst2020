@@ -71,12 +71,8 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
             if (ost == 0) {
                 ans.add(big.data[i])
             } else {
-                if (big.data[i] + 1 > 9) {
-                    ans.add((big.data[i] + 1) % 10)
-                } else {
-                    ans.add(big.data[i] + 1)
-                    ost = 0
-                }
+                ans.add((big.data[i] + 1) % 10)
+                ost = (big.data[i] + 1) / 10
             }
         }
         if (ost == 1) ans.add(1)
