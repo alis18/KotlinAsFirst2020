@@ -44,9 +44,10 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
     }
 
     constructor(list: MutableList<Int>) {
-        val newlist = list
-        while (newlist.last() == 0 && newlist.lastIndex != 0) newlist.removeAt(newlist.size - 1)
-        data.addAll(list)
+        val newlist = list.toMutableList()
+        val ans = newlist.dropLastWhile { it == 0 }.toMutableList()
+        if (ans.isEmpty()) ans += 0
+        data.addAll(ans)
     }
 
     /**
@@ -65,7 +66,7 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
             ans.add(1)
             ost = 0
         }
-        val big: UnsignedBigInteger = if (this > other) this else other
+        val big = if (this > other) this else other
         for (i in minimum until maximum) {
             if (ost == 0) {
                 ans.add(big.data[i])
@@ -91,7 +92,7 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
         if (other == this) return UnsignedBigInteger(0)
         val minimum = min(other.data.size, data.size)
         val maximum = max(other.data.size, data.size)
-        val dataa = this.data
+        val dataa = this.data.toMutableList()
         for (i in 0 until minimum) {
             if (dataa[i] >= other.data[i]) {
                 ans.add(dataa[i] - other.data[i])
@@ -181,10 +182,9 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
     /**
      * Сравнение на равенство (по контракту Any.equals)
      */
-    override fun equals(other: Any?): Boolean {
-        if ((other !is UnsignedBigInteger) || (data.size != other.data.size) || (data != other.data)) return false
-        return true
-    }
+    override fun equals(other: Any?): Boolean =
+        !((other !is UnsignedBigInteger) || (data != other.data))
+
 
     /**
      * Сравнение на больше/меньше (по контракту Comparable.compareTo)
