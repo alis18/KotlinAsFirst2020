@@ -68,12 +68,8 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
         }
         val big = if (this > other) this else other
         for (i in minimum until maximum) {
-            if (ost == 0) {
-                ans.add(big.data[i])
-            } else {
-                ans.add((big.data[i] + 1) % 10)
-                ost = (big.data[i] + 1) / 10
-            }
+            ans.add((big.data[i] + ost) % 10)
+            ost = (big.data[i] + ost) / 10
         }
         if (ost == 1) ans.add(1)
         return UnsignedBigInteger(ans)
