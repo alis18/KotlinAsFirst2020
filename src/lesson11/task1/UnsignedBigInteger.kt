@@ -62,10 +62,6 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
             ans.add((data[i] + other.data[i] + ost) % 10)
             ost = (data[i] + other.data[i] + ost) / 10
         }
-        if (ost == 1 && minimum == maximum) {
-            ans.add(1)
-            ost = 0
-        }
         val big = if (this > other) this else other
         for (i in minimum until maximum) {
             ans.add((big.data[i] + ost) % 10)
