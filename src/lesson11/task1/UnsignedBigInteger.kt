@@ -149,12 +149,6 @@ class UnsignedBigInteger : Comparable<UnsignedBigInteger> {
                         }
                         ans.add(0, step)
                         step = 0
-                        var b = UnsignedBigInteger(0)
-                        for (j in del.data.size - 1 downTo 0) {
-                            b *= UnsignedBigInteger(10)
-                            b += UnsignedBigInteger(del.data[j])
-                        }
-                        del = b
                     }
                 }
                 return UnsignedBigInteger(ans)
